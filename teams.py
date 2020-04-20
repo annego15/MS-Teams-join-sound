@@ -60,8 +60,12 @@ class Teams:
                 self.names = ["No Element"]
 
     def check_mute(self):
-        unmuted_icon = self.driver.find_elements_by_class_name("icons-call-microphone")
-        self.unmuted = True if unmuted_icon else False
+        try:
+            bar = self.driver.find_element_by_class_name("ts-calling-unified-bar-container")
+            unmuted_icon = bar.find_elements_by_class_name("icons-call-microphone")
+            self.unmuted = True if unmuted_icon else False
+        except selenium.common.exceptions.NoSuchElementException:
+            self.unmuted = False
         try:
             self.mute_value = self.driver.find_element_by_xpath("//*[@data-tid=\"peoplePicker\"]")\
                 .get_attribute('value')
@@ -100,14 +104,14 @@ while True:
                     login_error = True
 
         if logout and not logout_error and not login_error:
-            wave_obj = sa.WaveObject.from_wave_file("Sounds/logout.wav")
+            wave_obj = sa.WaveObject.from_wave_file("logout.wav")
             play_obj = wave_obj.play()
             play_obj.wait_done()
         if login:
             if login_error:
-                wave_obj = sa.WaveObject.from_wave_file("Sounds/error.wav")
+                wave_obj = sa.WaveObject.from_wave_file("error.wav")
             else:
-                wave_obj = sa.WaveObject.from_wave_file("Sounds/login.wav")
+                wave_obj = sa.WaveObject.from_wave_file("login.wav")
             play_obj = wave_obj.play()
             play_obj.wait_done()
 
@@ -115,7 +119,7 @@ while True:
         last_run_mute = time.time()
         session.check_mute()
         if session.unmuted and session.mute_value != "off":
-            wave_obj = sa.WaveObject.from_wave_file("Sounds/unmuted.wav")
+            wave_obj = sa.WaveObject.from_wave_file("unmuted.wav")
             play_obj = wave_obj.play()
             play_obj.wait_done()
 
