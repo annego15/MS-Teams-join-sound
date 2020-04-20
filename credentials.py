@@ -1,2 +1,2 @@
-pw = ""
-email = ""
+pw = "SuperPasswort69"
+email = "andres.neff@stud.kks.ch"

@@ -24,26 +24,27 @@ class Teams:
         sleep(2)
 
     def login(self):
-        try:
-            self.driver.find_element_by_xpath(
-                '//*[@id="i0116"]') \
-                .send_keys(email)
-            self.driver.find_element_by_xpath(
-                '// *[ @ id = "idSIButton9"]') \
-                .click()
-            sleep(1)
-            self.driver.find_element_by_xpath(
-                '//*[@id="i0118"]') \
-                .send_keys(pw)
-            self.driver.find_element_by_xpath(
-                '// *[ @ id = "idSIButton9"]') \
-                .click()
-            sleep(2)
-            self.driver.find_element_by_xpath(
-                '//*[@id="idSIButton9"]') \
-                .click()
-        finally:
-            pass
+        if pw and email:
+            try:
+                self.driver.find_element_by_xpath(
+                    '//*[@id="i0116"]') \
+                    .send_keys(email)
+                self.driver.find_element_by_xpath(
+                    '// *[ @ id = "idSIButton9"]') \
+                    .click()
+                sleep(1)
+                self.driver.find_element_by_xpath(
+                    '//*[@id="i0118"]') \
+                    .send_keys(pw)
+                self.driver.find_element_by_xpath(
+                    '// *[ @ id = "idSIButton9"]') \
+                    .click()
+                sleep(2)
+                self.driver.find_element_by_xpath(
+                    '//*[@id="idSIButton9"]') \
+                    .click()
+            finally:
+                pass
 
     def get_names(self):
         self.previous_names = self.names
