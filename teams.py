@@ -1,12 +1,11 @@
-from selenium import webdriver
 import selenium
+from selenium import webdriver
 from time import sleep
-from credentials import *
 import simpleaudio as sa
 import time
-import os
-import platform
 from webdrivermanager import ChromeDriverManager
+
+from credentials import *
 
 
 class Teams:
@@ -18,20 +17,6 @@ class Teams:
         self.unmuted = True
         self.mute_value = ""
 
-        """dir_path = os.path.dirname(os.path.realpath(__file__))
-
-        print(dir_path)
-
-        if platform.system() == "Windows":
-            path = dir_path + "/Windows/chromedriver.exe"
-        elif platform.system() == "Darwin":
-            path = dir_path + "/MacOS/chromedriver"
-        elif platform.system() == "Linux":
-            path = dir_path + "/Linux/chromedriver"
-        else:
-            raise SystemError("Your system seems to be not supported!")
-
-        self.driver = webdriver.Chrome(executable_path=path)"""
         gdd = ChromeDriverManager()
         gdd.download_and_install()
         self.driver = webdriver.Chrome()
