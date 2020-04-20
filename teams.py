@@ -43,13 +43,16 @@ class Teams:
                 self.driver.find_element_by_xpath(
                     '//*[@id="idSIButton9"]') \
                     .click()
-            finally:
+            except selenium.common.exceptions.NoSuchElementException:
+                pass
+            except selenium.common.exceptions.StaleElementReferenceException:
                 pass
 
     def get_names(self):
         self.previous_names = self.names
         try:
-            in_call = self.driver.find_element_by_xpath("//*[@id=\"page-content-wrapper\"]/div[1]/div/calling-screen/div/div[2]/meeting-panel-components/calling-roster/div/div[3]/div/div[1]/accordion/div/accordion-section[2]/div/calling-roster-section/div")
+            in_call = self.driver.find_element_by_xpath(
+                "//*[@id=\"page-content-wrapper\"]/div[1]/div/calling-screen/div/div[2]/meeting-panel-components/calling-roster/div/div[3]/div/div[1]/accordion/div/accordion-section[2]/div/calling-roster-section/div")
             name_objects = in_call.find_elements_by_class_name('ts-user-name')
             self.names = []
             for name_object in name_objects:
@@ -59,6 +62,9 @@ class Teams:
             if self.names != ["No Element"]:
                 # print("No Element found! (Probably logged out or switched window)")
                 self.names = ["No Element"]
+        except selenium.common.exceptions.StaleElementReferenceException:
+            pass
+
 
     def check_mute(self):
         try:
@@ -68,11 +74,13 @@ class Teams:
         except selenium.common.exceptions.NoSuchElementException:
             self.unmuted = False
         try:
-            self.mute_value = self.driver.find_element_by_xpath("//*[@data-tid=\"peoplePicker\"]")\
+            self.mute_value = self.driver.find_element_by_xpath("//*[@data-tid=\"peoplePicker\"]") \
                 .get_attribute('value')
         except selenium.common.exceptions.NoSuchElementException:
             pass
-            
+        except AttributeError:
+            pass
+
 
 session = Teams()
 session.login()
@@ -123,5 +131,3 @@ while True:
             wave_obj = sa.WaveObject.from_wave_file("unmuted.wav")
             play_obj = wave_obj.play()
             play_obj.wait_done()
-
-
