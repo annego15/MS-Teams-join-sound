@@ -1,2 +1,2 @@
-pw = "Sicher123123"
+pw = ""
 email = "andres.neff@stud.kks.ch"
