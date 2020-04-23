@@ -2,10 +2,23 @@ import selenium
 from selenium import webdriver
 from time import sleep
 import simpleaudio as sa
-import time
 from webdrivermanager import ChromeDriverManager
+import time
+import os
+import sys
 
 from credentials import *
+
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 class Teams:
@@ -18,8 +31,8 @@ class Teams:
         self.mute_value = ""
 
         gdd = ChromeDriverManager()
-        gdd.download_and_install()
-        self.driver = webdriver.Chrome()
+        path = gdd.download_and_install()
+        self.driver = webdriver.Chrome(executable_path=path[1])
         self.driver.get("https://teams.microsoft.com")
         sleep(2)
 
@@ -64,7 +77,6 @@ class Teams:
                 self.names = ["No Element"]
         except selenium.common.exceptions.StaleElementReferenceException:
             pass
-
 
     def check_mute(self):
         try:
@@ -113,14 +125,14 @@ while True:
                     login_error = True
 
         if logout and not logout_error and not login_error:
-            wave_obj = sa.WaveObject.from_wave_file("logout.wav")
+            wave_obj = sa.WaveObject.from_wave_file(resource_path("logout.wav"))
             play_obj = wave_obj.play()
             play_obj.wait_done()
         if login:
             if login_error:
-                wave_obj = sa.WaveObject.from_wave_file("error.wav")
+                wave_obj = sa.WaveObject.from_wave_file(resource_path("error.wav"))
             else:
-                wave_obj = sa.WaveObject.from_wave_file("login.wav")
+                wave_obj = sa.WaveObject.from_wave_file(resource_path("login.wav"))
             play_obj = wave_obj.play()
             play_obj.wait_done()
 
@@ -128,6 +140,8 @@ while True:
         last_run_mute = time.time()
         session.check_mute()
         if session.unmuted and session.mute_value != "off":
-            wave_obj = sa.WaveObject.from_wave_file("unmuted.wav")
+            wave_obj = sa.WaveObject.from_wave_file(resource_path("unmuted.wav"))
             play_obj = wave_obj.play()
             play_obj.wait_done()
+
+    sleep(0.1)
