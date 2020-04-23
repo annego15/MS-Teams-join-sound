@@ -18,8 +18,8 @@ class Teams:
         self.mute_value = ""
 
         gdd = ChromeDriverManager()
-        gdd.download_and_install()
-        self.driver = webdriver.Chrome()
+        path = gdd.download_and_install()
+        self.driver = webdriver.Chrome(executable_path = path[1])
         self.driver.get("https://teams.microsoft.com")
         sleep(2)
 
@@ -131,3 +131,4 @@ while True:
             wave_obj = sa.WaveObject.from_wave_file("unmuted.wav")
             play_obj = wave_obj.play()
             play_obj.wait_done()
+    sleep(0.1)
